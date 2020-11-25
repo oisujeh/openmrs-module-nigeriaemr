@@ -9,7 +9,7 @@
     <br>
 </div>
 
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" data-show="false">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-body">
@@ -21,7 +21,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="myModalCapture" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+<div class="modal fade" id="myModalCapture" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" data-show="false">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-body">
@@ -247,7 +247,7 @@
         jqq.getJSON(captureURL)
             .success(function (data) {
                 jqq('#hidden-cancel-two').click();
-                jqq('.modal-backdrop').hide();
+                
                 if (data.ErrorMessage === '' || data.ErrorMessage === null) {
                     let imgId = fingerPosition[position];
                     document.getElementById('H_'+imgId).style.display = 'none';
@@ -260,14 +260,13 @@
                         jqq('input').removeAttr('disabled');
                     }
                     jqq('#hidden-cancel-two').click();
-                    jqq('.modal-backdrop').hide();
+                    
                 }else if("-1" === data.ErrorCode){
                     alertt('Fingerprint is of low quality kindly recapture');
                 }else {
                     alertt(data.ErrorMessage);
                 }
                 jqq('#hidden-cancel-two').click();
-                jqq('.modal-backdrop').hide();
             })
             .error(function (xhr, status, err) {
                 jqq('#hidden-cancel-two').click();
@@ -278,14 +277,16 @@
                     jqq('#hidden-cancel-two').click();
                     alertt('System error. Please check that the Biometric service is running');
                 }
+            }).complete(function () {
+                jqq('#hidden-cancel-two').click();
             });
         jqq('#hidden-cancel-two').click();
-        jqq('.modal-backdrop').hide();
+        
     }
 
     function recaptureFP(position) {
         jqq('#myModalCapture').modal('show');
-        jqq('.modal-backdrop').hide();
+        
         let captureURL = url + '/reCapturePrint?fingerPosition=' + position + '&patientId='+ patientId;
 
         jqq.getJSON(captureURL)
@@ -307,7 +308,7 @@
                     alertt(data.ErrorMessage);
                 }
                 jqq('#hidden-cancel-two').click();
-                jqq('.modal-backdrop').hide();
+                
             })
             .error(function (xhr, status, err) {
                 jqq('#hidden-cancel-two').click();
@@ -318,10 +319,11 @@
                     jqq('#hidden-cancel-two').click();
                     alertt('System error. Please check that the Biometric service is running');
                 }
-            });
+            }).complete(function () {
+            jqq('#hidden-cancel-two').click();
+        });
         jqq('#hidden-cancel-two').click();
         jqq("[data-dismiss=myModalCapture]").trigger({ type: "click" });
-        jqq('.modal-backdrop').hide();
     }
 
     function getUrlVars() {
