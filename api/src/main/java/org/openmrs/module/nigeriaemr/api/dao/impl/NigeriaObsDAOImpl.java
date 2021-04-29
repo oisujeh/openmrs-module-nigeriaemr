@@ -1,10 +1,13 @@
 package org.openmrs.module.nigeriaemr.api.dao.impl;
 
 import org.hibernate.Criteria;
+import org.hibernate.HibernateException;
 import org.hibernate.SQLQuery;
+import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.openmrs.Concept;
+import org.openmrs.Encounter;
 import org.openmrs.Obs;
 import org.openmrs.Person;
 import org.openmrs.api.db.DAOException;
@@ -12,9 +15,13 @@ import org.openmrs.api.db.hibernate.DbSession;
 import org.openmrs.api.db.hibernate.DbSessionFactory;
 import org.openmrs.api.db.hibernate.HibernateObsDAO;
 import org.openmrs.module.nigeriaemr.api.dao.NigeriaObsDAO;
+import org.openmrs.module.nigeriaemr.api.service.impl.NigeriaEncounterServiceImpl;
+import org.openmrs.module.nigeriaemr.util.LoggerUtils;
 
+import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -47,35 +54,41 @@ public class NigeriaObsDAOImpl extends HibernateObsDAO implements NigeriaObsDAO 
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<Obs> getObsByConceptId(Integer personId, Integer conceptId, List<Integer> encounterIds, boolean includeVoided)
-	        throws DAOException {
-		List<Obs> obs = new ArrayList<>();
-		List<Integer> obsIds;
-		
-		String query = "SELECT distinct(obs.obs_id) FROM obs WHERE TRUE";
-		if (personId != null)
-			query += " AND obs.person_id = :personId";
-		if (conceptId != null)
-			query += " AND obs.concept_id = :conceptId";
-		if (encounterIds != null && encounterIds.size() > 0)
-			query += " AND obs.encounter_id in :encounterIds";
-		
-		query += " AND obs.voided = false";
-		
-		SQLQuery sql = getSession().createSQLQuery(query);
-		if (personId != null)
-			sql.setInteger("personId", personId);
-		if (conceptId != null)
-			sql.setInteger("conceptId", conceptId);
-		if (encounterIds != null && encounterIds.size() > 0)
-			sql.setParameterList("encounterIds", encounterIds);
-		
-		obsIds = sql.list();
-		
-		if (obsIds.size() >= 1) {
-			obs = this.getObs(obsIds, includeVoided);
+	         {
+		try {
+			List<Obs> obs = new ArrayList<>();
+			List<Integer> obsIds;
+
+			String query = "SELECT distinct(obs.obs_id) FROM obs WHERE TRUE";
+			if (personId != null)
+				query += " AND obs.person_id = :personId";
+			if (conceptId != null)
+				query += " AND obs.concept_id = :conceptId";
+			if (encounterIds != null && encounterIds.size() > 0)
+				query += " AND obs.encounter_id in :encounterIds";
+
+			query += " AND obs.voided = false";
+
+			SQLQuery sql = getSession().createSQLQuery(query);
+			if (personId != null)
+				sql.setInteger("personId", personId);
+			if (conceptId != null)
+				sql.setInteger("conceptId", conceptId);
+			if (encounterIds != null && encounterIds.size() > 0)
+				sql.setParameterList("encounterIds", encounterIds);
+
+			obsIds = sql.list();
+
+			if (obsIds.size() >= 1) {
+				obs = this.getObs(obsIds, includeVoided);
+			}
+
+			return obs;
+		}catch (HibernateException ex){
+			LoggerUtils.write(NigeriaEncounterServiceImpl.class.getName(), ex.getMessage(), LoggerUtils.LogFormat.FATAL,
+					LoggerUtils.LogLevel.live);
 		}
-		
-		return obs;
+		return null;
 	}
 	
 	@Override
@@ -299,46 +312,64 @@ public class NigeriaObsDAOImpl extends HibernateObsDAO implements NigeriaObsDAO 
 	
 	@Override
 	public List<Integer> getPatientEncounterIdsByDate(Integer id, Date fromDate, Date toDate) throws DAOException {
-		String query = "SELECT encounter_id FROM obs WHERE voided = false ";
-		if (id != null)
-			query += " AND person_id = :person_id";
-		if (fromDate != null)
-			query += " AND date_created >= :fromDate";
-		if (toDate != null)
-			query += " AND date_created <= :toDate";
-		
-		query += " UNION ALL ";
-		
-		query += "SELECT encounter_id FROM encounter WHERE voided = false ";
-		if (id != null)
-			query += " AND patient_id = :person_id";
-		if (fromDate != null)
-			query += " AND (date_created >= :fromDate or date_changed >= :fromDate)";
-		if (toDate != null)
-			query += " AND (date_created <= :toDate or date_changed >= :toDate)";
-		
-		query += " UNION ALL ";
-		
-		query += "SELECT encounter.encounter_id from encounter, visit WHERE visit.visit_id = encounter.visit_id  AND visit.voided = FALSE AND encounter.voided = FALSE ";
-		if (id != null)
-			query += " AND encounter.patient_id = :person_id";
-		if (fromDate != null)
-			query += " AND (visit.date_created >= :fromDate OR visit.date_changed >= :fromDate)";
-		if (toDate != null)
-			query += " AND (visit.date_created <= :toDate OR visit.date_changed >= :toDate)";
-		
-		SQLQuery sql = getSession().createSQLQuery(query);
-		if (fromDate != null) {
-			sql.setTimestamp("fromDate", fromDate);
+		try {
+			
+			String query = "SELECT DISTINCT encounter_id as enc FROM obs WHERE voided = false ";
+			if (id != null)
+				query += " AND person_id = :person_id ";
+			if (fromDate != null)
+				query += " AND obs_datetime >= :fromDate ";
+			if (toDate != null)
+				query += " AND obs_datetime <= :toDate ";
+			
+			query += " UNION ALL ";
+			
+			query += "SELECT DISTINCT encounter_id as enc FROM encounter WHERE voided = false ";
+			if (id != null)
+				query += " AND patient_id = :person_id ";
+			if (fromDate != null)
+				query += " AND (date_created >= :fromDate or date_changed >= :toDate)";
+			if (toDate != null)
+				query += " AND (date_created <= :fromDate or date_changed >= :toDate)";
+			
+			query += " UNION ALL ";
+			
+			query += "SELECT DISTINCT encounter.encounter_id as enc from encounter, visit WHERE visit.visit_id = encounter.visit_id  AND visit.voided = FALSE AND encounter.voided = FALSE ";
+			if (id != null)
+				query += " AND encounter.patient_id = :person_id ";
+			if (fromDate != null)
+				query += " AND (visit.date_created >= :fromDate OR visit.date_changed >= :toDate)";
+			if (toDate != null)
+				query += " AND (visit.date_created <= :fromDate OR visit.date_changed >= :toDate)";
+			
+			sessionFactory.getCurrentSession().clear();
+			SQLQuery sql = sessionFactory.getCurrentSession().createSQLQuery(query);
+			
+			if (fromDate != null) {
+				sql.setParameter("fromDate", fromDate);
+			}
+			if (toDate != null) {
+				sql.setParameter("toDate", toDate);
+			}
+			if (id != null)
+				sql.setParameter("person_id", id);
+			List<Integer> encounterIds = null;
+			try {
+				encounterIds = sql.list();
+				return encounterIds.stream().distinct().collect(Collectors.toList());
+			}
+			catch (Exception e) {
+				e.getCause().getLocalizedMessage();
+			}
+			sessionFactory.getCurrentSession().getTransaction().commit();
+			return encounterIds;
 		}
-		if (toDate != null) {
-			sql.setTimestamp("toDate", toDate);
+		catch (HibernateException ex) {
+			Throwable cause = ex.getCause();
+			if (cause instanceof SQLException) {
+				System.out.println(cause.getMessage());
+			}
 		}
-		if (id != null)
-			sql.setInteger("person_id", id);
-		
-		List<Integer> ret = sql.list();
-		
-		return ret.stream().distinct().collect(Collectors.toList());
+		return null;
 	}
 }

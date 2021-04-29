@@ -73,7 +73,7 @@ public class NDRConverter {
         try {
             patient = pts;
             if(!pts.isVoided()) {
-                List<Integer> encounterIds = nigeriaObsService.getPatientEncounterIdsByDate(pts.getId(), this.fromDate, this.toDate);
+               List<Integer> encounterIds = nigeriaObsService.getPatientEncounterIdsByDate(pts.getId(), this.fromDate, this.toDate);
                 if(encounterIds != null && encounterIds.size() > 0) {
                     List<Encounter> filteredEncounters = nigeriaEncounterService.getEncountersByEncounterIds(encounterIds);
                     if (filteredEncounters == null || filteredEncounters.isEmpty()) {
@@ -466,12 +466,9 @@ public class NDRConverter {
 
         List<LaboratoryReportType> result = new ArrayList<>();
         for(String visitDate: labOrderAndResultReport.keySet()){
-            if(sampleCollectionReport.get(visitDate) != null){
+            if(sampleCollectionReport.get(visitDate) != null) {
                 LaboratoryReportType sampleLaboratoryReportType = sampleCollectionReport.get(visitDate);
                 LaboratoryReportType labLaboratoryReportType = labOrderAndResultReport.get(visitDate);
-
-                //set collection Date
-                labLaboratoryReportType.setCollectionDate(sampleLaboratoryReportType.getCollectionDate());
                 //set ordered date
                 if(sampleLaboratoryReportType.getLaboratoryOrderAndResult().size() > 0 &&
                         labLaboratoryReportType.getLaboratoryOrderAndResult().size() > 0 ){
@@ -614,7 +611,7 @@ public class NDRConverter {
 
     public String getValidation(String id) {
         NigeriaemrService nigeriaemrService = Context.getService(NigeriaemrService.class);
-        String sqlV = nigeriaemrService.getSqlVersion();
+        String sqlV = "5.7.21-log";//nigeriaemrService.getSqlVersion();
         StringBuilder textToEnc = new StringBuilder();
         textToEnc.append(System.getProperty("os.arch"));
         textToEnc.append("|");

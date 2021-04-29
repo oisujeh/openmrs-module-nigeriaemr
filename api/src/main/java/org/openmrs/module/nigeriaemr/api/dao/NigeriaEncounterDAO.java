@@ -20,4 +20,6 @@ public interface NigeriaEncounterDAO extends EncounterDAO {
 	        List<Integer> encounterTypeIds, boolean asc, int size) throws DAOException;
 	
 	List<Encounter> getEncountersByEncounterIds(List<Integer> encounterIds) throws DAOException;
+	
+	Encounter getEncounterByEncounterType(Patient patient, int encounterTypeId) throws DAOException;
 }

@@ -180,7 +180,7 @@ public class PMTCTDictionary {
         pmtctDictionary.put(164857, "ERF");
         pmtctDictionary.put(160429, "Alive");
         pmtctDictionary.put(164970, "1");
-        pmtctDictionary.put(165860, "Within 72 hrs of facility delivery");
+        pmtctDictionary.put(165860, "1");
         pmtctDictionary.put(1228, "Pos");
         pmtctDictionary.put(1229, "Neg");
         pmtctDictionary.put(134612, "Dead");
@@ -295,7 +295,7 @@ public class PMTCTDictionary {
         syphilis.put(664, "NR");
         syphilis.put(703, "R");
 
-        //pmtctDictionary.put(165860, "4");
+        pmtctDictionary.put(165860, "4");
     }
 
     public List<AntenatalRegistrationType> createAntenatalRegistrationType(List<Encounter> anteNatalEncounters) {

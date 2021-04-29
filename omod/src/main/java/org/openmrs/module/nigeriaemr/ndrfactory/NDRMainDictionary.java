@@ -120,7 +120,7 @@ public class NDRMainDictionary {
         map.put(5555, "M");
         map.put(1060, "LWP");
         map.put(135704, "LA");
-        map.put(5622, "Other");
+        map.put(5622, "10");
         //functional status concept id
         map.put(162750, "W");
         map.put(162752, "B");
@@ -147,8 +147,16 @@ public class NDRMainDictionary {
         map.put(160538, "9"); //ANC/PMTCT
         map.put(160537, "12"); //In Patient
         map.put(160536, "12");//Current Clinic Patient
-        map.put(160542, "2");//OPD
-        map.put(160541, "6");//TB DOTS
+        map.put(160542, "1");//OPD
+        map.put(160536, "2");// Inpatient
+        map.put(160539, "3");//  VCT
+        map.put(160541, "4"); //TB DOT
+        map.put(160546, "5");//  STI Clinic
+        map.put(160538, "6");//  ANC/PMTCT
+        map.put(160563, "7");//  Transfer-in
+        map.put(160545, "8");// Outreaches HIV enrollment
+        map.put(165794, "9");// Index testing
+
         map.put(160543, "4");//Outreaches
         map.put(160545, "11");
         map.put(160546, "1");

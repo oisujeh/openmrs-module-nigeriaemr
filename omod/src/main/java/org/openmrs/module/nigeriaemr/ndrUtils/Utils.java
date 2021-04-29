@@ -13,13 +13,11 @@ import org.openmrs.module.nigeriaemr.api.service.NigeriaEncounterService;
 import org.openmrs.module.nigeriaemr.api.service.NigeriaObsService;
 import org.openmrs.module.nigeriaemr.api.service.NigeriaemrService;
 import org.openmrs.module.nigeriaemr.model.DatimMap;
+import org.openmrs.module.nigeriaemr.model.ndr.AddressType;
 import org.openmrs.module.nigeriaemr.model.ndr.FacilityType;
 import org.openmrs.module.nigeriaemr.ndrUtils.LoggerUtils.LogFormat;
 import org.openmrs.module.nigeriaemr.ndrUtils.LoggerUtils.LogLevel;
-import org.openmrs.module.nigeriaemr.ndrfactory.ClinicalDictionary;
-import org.openmrs.module.nigeriaemr.ndrfactory.LabDictionary;
-import org.openmrs.module.nigeriaemr.ndrfactory.PMTCTDictionary;
-import org.openmrs.module.nigeriaemr.ndrfactory.PharmacyDictionary;
+import org.openmrs.module.nigeriaemr.ndrfactory.*;
 import org.openmrs.module.nigeriaemr.omodmodels.DBConnection;
 import org.openmrs.module.nigeriaemr.omodmodels.Version;
 import org.openmrs.module.nigeriaemr.util.FileUtils;
@@ -35,9 +33,11 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Paths;
+import java.sql.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.Date;
 import java.util.stream.Collectors;
 
 public class Utils {
@@ -665,6 +665,23 @@ public class Utils {
 		return enrollmentDate;
 	}
 	
+	public static Date extractEnrollmentDate(Patient patient, int encounterTypeId) {
+		Optional<Encounter> hivEnrollmentEncounter = Context.getEncounterService()
+				.getEncountersByPatient(patient)
+				.stream().filter(x->x.getEncounterType().getEncounterTypeId() == encounterTypeId).findAny();
+		if(hivEnrollmentEncounter.isPresent()){
+			return hivEnrollmentEncounter.get().getEncounterDatetime();
+		}
+		/*NigeriaEncounterService nigeriaEncounterService = Context.getService(NigeriaEncounterService.class);
+		Encounter hivEnrollmentEncounter = nigeriaEncounterService.getEncounterByEncounterType(patient, encounterTypeId);
+		if (hivEnrollmentEncounter != null) {
+			return hivEnrollmentEncounter.getEncounterDatetime();
+		} else {
+			return null;
+		}*/
+		return null;
+	}
+	
 	public static PatientProgram extractProgramByID(List<PatientProgram> patientProgramList, int programID) {
 		PatientProgram patientProgram = null;
 		if (patientProgramList != null && !patientProgramList.isEmpty()) {
@@ -1225,10 +1242,14 @@ public class Utils {
 	public static Obs getLastObs(Patient patient, int Concept_Id, Date endDate) {
 		Concept concept = Context.getConceptService().getConcept(Concept_Id);
 		return nigeriaObsService.getLastObsByConceptId(patient.getPerson(), concept, null, endDate, false);
-	}
+	};
 	
 	public static List<Obs> getObs(Patient patient, int conceptId) {
-		return nigeriaObsService.getObsByConceptId(patient.getPersonId(), conceptId, null, false);
+		List<Obs> obsList = nigeriaObsService.getObsByConceptId(patient.getPersonId(), conceptId, null, false);
+		if (obsList != null) {
+			return obsList;
+		}
+		return null;
 	}
 	
 	public static List<Obs> getObs(Patient patient, int conceptId, int encounterId) {

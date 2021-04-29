@@ -1,6 +1,8 @@
 package org.openmrs.module.nigeriaemr.api.dao.impl;
 
 import org.hibernate.Criteria;
+import org.hibernate.HibernateException;
+import org.hibernate.SQLQuery;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.openmrs.Encounter;
@@ -11,8 +13,10 @@ import org.openmrs.api.db.hibernate.DbSession;
 import org.openmrs.api.db.hibernate.DbSessionFactory;
 import org.openmrs.api.db.hibernate.HibernateEncounterDAO;
 import org.openmrs.module.nigeriaemr.api.dao.NigeriaEncounterDAO;
+import org.openmrs.module.nigeriaemr.model.ndr.EncountersType;
 import org.springframework.cache.annotation.Cacheable;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -126,4 +130,23 @@ public class NigeriaEncounterDAOImpl extends HibernateEncounterDAO implements Ni
 		criteria.add(Restrictions.in("encounterId", encounterIds));
 		return criteria.list();
 	}
+	
+	@Override
+	public Encounter getEncounterByEncounterType(Patient patient, int encounterTypeId) throws DAOException {
+		try {
+			Criteria criteria = getSession().createCriteria(Encounter.class);
+			criteria.add(Restrictions.ge("patient.", patient));
+			criteria.add(Restrictions.eq("encounterType.encounterTypeId", encounterTypeId));
+			criteria.setFetchSize(1);
+			if (criteria.list() != null) {
+				if (criteria.list().size() > 0)
+					return (Encounter) criteria.list().get(0);
+			}
+		}
+		catch (HibernateException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 }

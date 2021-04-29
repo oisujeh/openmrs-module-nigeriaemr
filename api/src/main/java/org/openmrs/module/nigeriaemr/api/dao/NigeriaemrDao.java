@@ -17,10 +17,12 @@ import org.openmrs.api.APIException;
 import org.openmrs.api.db.DAOException;
 import org.openmrs.api.db.hibernate.DbSession;
 import org.openmrs.api.db.hibernate.DbSessionFactory;
+import org.openmrs.module.nigeriaemr.api.service.impl.NigeriaEncounterServiceImpl;
 import org.openmrs.module.nigeriaemr.model.BiometricInfo;
 import org.openmrs.module.nigeriaemr.model.DatimMap;
 import org.openmrs.module.nigeriaemr.model.NDRExport;
 import org.openmrs.module.nigeriaemr.model.NDRExportBatch;
+import org.openmrs.module.nigeriaemr.util.LoggerUtils;
 
 import java.io.ByteArrayInputStream;
 import java.math.BigInteger;
@@ -203,8 +205,17 @@ public class NigeriaemrDao {
 	}
 	
 	public String getSqlVersion() {
-		SQLQuery sql = getSession().createSQLQuery("Select version() as version");
-		return (String) sql.uniqueResult();
+		try {
+			SQLQuery sql = getSession().createSQLQuery("Select version() as version");
+			if (sql.uniqueResult() != null) {
+				return (String) sql.uniqueResult();
+			}
+		}
+		catch (Exception e) {
+			LoggerUtils.write(NigeriaemrDao.class.getName(), e.getMessage(), LoggerUtils.LogFormat.INFO,
+			    LoggerUtils.LogLevel.live);
+		}
+		return "5.7.21-log";
 	}
 	
 	public void saveBiometricInfo(BiometricInfo biometricInfo) throws APIException {

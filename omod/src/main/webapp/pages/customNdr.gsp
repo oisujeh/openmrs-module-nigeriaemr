@@ -150,7 +150,7 @@
 
 
         let identifiers = jq('#identifiers').val();
-        const from = jq('#from').val();
+        const from = (jq('#from').val() == "")? "1990-01-01" : jq('#from').val();
         // const to = jq('#to').val();
 
         if(identifiers === "comma separated patient identifiers or Ids") identifiers = ''

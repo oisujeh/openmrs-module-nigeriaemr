@@ -30,4 +30,7 @@ public interface NigeriaEncounterService extends EncounterService {
 	
 	@Authorized(NigeriaemrConfig.MODULE_PRIVILEGE)
 	List<Encounter> getEncountersByEncounterIds(List<Integer> encounterIds) throws APIException;
+	
+	@Authorized(NigeriaemrConfig.MODULE_PRIVILEGE)
+	Encounter getEncounterByEncounterType(Patient patient, int encounterTypeId) throws APIException;
 }

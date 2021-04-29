@@ -78,4 +78,17 @@ public class NigeriaEncounterServiceImpl extends EncounterServiceImpl implements
 	public List<Encounter> getEncountersByEncounterIds(List<Integer> encounterIds) throws APIException {
 		return dao.getEncountersByEncounterIds(encounterIds);
 	}
+	
+	@Override
+	public Encounter getEncounterByEncounterType(Patient patient, int encounterTypeId) throws APIException {
+		Encounter encounter = null;
+		try {
+			encounter = dao.getEncounterByEncounterType(patient, encounterTypeId);
+		}
+		catch (Exception e) {
+			LoggerUtils.write(NigeriaEncounterServiceImpl.class.getName(), e.getMessage(), LoggerUtils.LogFormat.INFO,
+			    LoggerUtils.LogLevel.live);
+		}
+		return encounter;
+	}
 }

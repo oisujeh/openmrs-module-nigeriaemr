@@ -155,6 +155,13 @@
              endDelimiter=";"/>
     </changeSet>
 
+    <changeSet id="nigeriaemr-2021-03-24-17260099" author="wande">
+        <sqlFile path="sql/dataim_map.sql"
+                 stripComments="true"
+                 splitStatements="true"
+                 endDelimiter=";"/>
+    </changeSet>
+
     <changeSet id="create_pbs_table_2021021103267" author="wande">
         <sql>
             CREATE TABLE IF NOT EXISTS `biometricinfo` (`biometricInfo_Id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -277,5 +284,18 @@
             update address_hierarchy_entry set user_generated_id = 94 where address_hierarchy_entry_id=8868;
         </sql>
     </changeSet>
- 
+
+    <changeSet id="Resolve_INHB6_Wrong_TB_Maping_202104241156" author="temiye" runOnChange="true">
+        <sql>
+            UPDATE obs  SET value_coded = 656 WHERE concept_id =165304  AND value_coded  =1679;
+        </sql>
+    </changeSet>
+
+    <changeSet id="correct_facility_despensing_202104261156" author="temiye" runOnChange="true">
+        <sql>
+            UPDATE concept  SET datatype_id = 2 WHERE concept_id =166276
+        </sql>
+    </changeSet>
+
+
 </databaseChangeLog>

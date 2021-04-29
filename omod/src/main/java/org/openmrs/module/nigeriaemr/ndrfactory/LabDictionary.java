@@ -206,12 +206,7 @@ public class LabDictionary {
             labReportType.setVisitID(Utils.getVisitId(pts, enc));
             labReportType.setVisitDate(convertedDate);
 
-            boolean artStatusFlag = isArtStatusFlag(pts, enc);
-            if(artStatusFlag){
-                labReportType.setARTStatusCode("A");
-            } else {
-                labReportType.setARTStatusCode("N");
-            }
+
 
             Obs obs =  Utils.extractObs(Visit_Type_Concept_Id, labObsList);
             if (obs != null && obs.getValueCoded() != null) {
@@ -256,6 +251,13 @@ public class LabDictionary {
                 return labReportType;
             }
 
+//            boolean artStatusFlag = isArtStatusFlag(pts, enc);
+//            if(artStatusFlag){
+//                labReportType.setARTStatusCode("A");
+//            } else {
+//                labReportType.setARTStatusCode("N");
+//            }
+
         } catch (Exception ex) {
             LoggerUtils.write(LabDictionary.class.getName(), ex.getMessage(), LogFormat.FATAL, LogLevel.live);
             System.out.println(ex.getMessage());
@@ -266,13 +268,14 @@ public class LabDictionary {
     private boolean isArtStatusFlag(Patient pts, Encounter enc) {
         boolean artStatusFlag = false;
         List<Obs> myObs = getObs(pts, 162240);
+        if(myObs != null) {
+            for (Obs ObsPs : myObs) {
+                if (ObsPs.getObsDatetime().equals(enc.getEncounterDatetime()) ||
+                        ObsPs.getObsDatetime().before(enc.getEncounterDatetime())) {
+                    artStatusFlag = true;
+                }
 
-        for (Obs ObsPs : myObs) {
-            if(ObsPs.getObsDatetime().equals(enc.getEncounterDatetime()) ||
-                    ObsPs.getObsDatetime().before(enc.getEncounterDatetime()) ){
-                artStatusFlag = true;
             }
-
         }
         return artStatusFlag;
     }

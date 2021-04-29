@@ -58,6 +58,7 @@ public class ClinicalDictionary {
     private void loadDictionary() {
         //Map OpenMRS concepts to corresponding NDR values
         map.put(123, "12");
+        map.put(165686, "1e");
         //adherence
         map.put(165289, "P");
         map.put(165287, "G");
@@ -346,7 +347,7 @@ public class ClinicalDictionary {
 
         }
 
-
+/*
         hivEncounterType.setStoppedRegimen(retrieveStoppedRegimen(obsListForOneVisit));//Stopped Regimen
         if (retrieveStoppedRegimen(obsListForOneVisit)) {
             obs = Utils.extractObs(Utils.REASON_STOPPED_REGIMEN, obsListForOneVisit);//ReasonForRegimenStopped
@@ -364,7 +365,7 @@ public class ClinicalDictionary {
             dateStoppedRegimen = new DateTime(obs.getValueDate());
             hivEncounterType.setDateStoppedRegimen(utils.getXmlDate(dateStoppedRegimen.toDate()));
 
-        }
+        }*/
 
         if (nextAppointmentDate != null) {
             daysOnARV = Utils.getDateDiffInDays(visitDate, nextAppointmentDate.toDate());

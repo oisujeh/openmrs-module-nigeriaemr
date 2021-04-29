@@ -225,7 +225,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
         "cd4TestDate", "reasonForRegimenSwitchSubs", "prescribedRegimenInitialIndicator",
         "prescribedRegimenCurrentIndicator", "typeOfPreviousExposureCode", "poorAdherenceIndicator",
         "reasonForPoorAdherence", "reasonRegimenEndedCode", "substitutionIndicator", "switchIndicator",
-        "nextAppointmentDate", "stoppedRegimen", "dateStoppedRegimen", "reasonForStoppedRegimen" })
+        "nextAppointmentDate"/*, "stoppedRegimen", "dateStoppedRegimen", "reasonForStoppedRegimen"*/})
 public class HIVEncounterType {
 	
 	@XmlElement(name = "VisitID", required = true)
@@ -336,15 +336,15 @@ public class HIVEncounterType {
 	@XmlSchemaType(name = "date")
 	protected XMLGregorianCalendar nextAppointmentDate;
 	
-	@XmlElement(name = "StoppedRegimen")
-	protected Boolean stoppedRegimen;
-	
-	@XmlElement(name = "DateStoppedRegimen")
-	@XmlSchemaType(name = "date")
-	protected XMLGregorianCalendar dateStoppedRegimen;
-	
-	@XmlElement(name = "ReasonForStoppedRegimen")
-	protected String reasonForStoppedRegimen;
+	/*	@XmlElement(name = "StoppedRegimen")
+		protected Boolean stoppedRegimen;
+		
+		@XmlElement(name = "DateStoppedRegimen")
+		@XmlSchemaType(name = "date")
+		protected XMLGregorianCalendar dateStoppedRegimen;
+		
+		@XmlElement(name = "ReasonForStoppedRegimen")
+		protected String reasonForStoppedRegimen;*/
 	
 	/**
 	 * Gets the value of the visitID property.
@@ -981,53 +981,59 @@ public class HIVEncounterType {
 	 * 
 	 * @return possible object is {@link Boolean }
 	 */
+	/*
 	public Boolean isStoppedRegimen() {
-		return stoppedRegimen;
+	return stoppedRegimen;
 	}
 	
-	/**
+	*//**
 	 * Sets the value of the stoppedRegimen property.
 	 * 
 	 * @param value allowed object is {@link Boolean }
 	 */
+	/*
 	public void setStoppedRegimen(Boolean value) {
-		this.stoppedRegimen = value;
+	this.stoppedRegimen = value;
 	}
 	
-	/**
+	*//**
 	 * Gets the value of the dateStoppedRegimen property.
 	 * 
 	 * @return possible object is {@link XMLGregorianCalendar }
 	 */
+	/*
 	public XMLGregorianCalendar getDateStoppedRegimen() {
-		return dateStoppedRegimen;
+	return dateStoppedRegimen;
 	}
 	
-	/**
+	*//**
 	 * Sets the value of the dateStoppedRegimen property.
 	 * 
 	 * @param value allowed object is {@link XMLGregorianCalendar }
 	 */
+	/*
 	public void setDateStoppedRegimen(XMLGregorianCalendar value) {
-		this.dateStoppedRegimen = value;
+	this.dateStoppedRegimen = value;
 	}
 	
-	/**
+	*//**
 	 * Gets the value of the reasonForStoppedRegimen property.
 	 * 
 	 * @return possible object is {@link String }
 	 */
+	/*
 	public String getReasonForStoppedRegimen() {
-		return reasonForStoppedRegimen;
+	return reasonForStoppedRegimen;
 	}
 	
-	/**
+	*//**
 	 * Sets the value of the reasonForStoppedRegimen property.
 	 * 
 	 * @param value allowed object is {@link String }
 	 */
+	/*
 	public void setReasonForStoppedRegimen(String value) {
-		this.reasonForStoppedRegimen = value;
-	}
+	this.reasonForStoppedRegimen = value;
+	}*/
 	
 }
