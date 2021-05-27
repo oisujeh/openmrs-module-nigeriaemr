@@ -293,7 +293,14 @@
 
     <changeSet id="correct_facility_despensing_202104261156" author="temiye" runOnChange="true">
         <sql>
-            UPDATE concept  SET datatype_id = 2 WHERE concept_id =166276
+            UPDATE concept  SET datatype_id = 2 WHERE concept_id =166276;
+        </sql>
+    </changeSet>
+
+    <changeSet id="clean_obs_without_encounter_202105201156" author="temiye" runOnChange="true">
+        <sql>
+            UPDATE  obs SET  voided = 1,  voided_by  =  1 , date_voided  = NOW()
+            WHERE encounter_id  NOT IN (SELECT encounter_id FROM encounter);
         </sql>
     </changeSet>
 

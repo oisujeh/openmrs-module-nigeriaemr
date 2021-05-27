@@ -226,7 +226,7 @@ public class NigeriaPatientDAOImpl extends HibernatePatientDAO implements Nigeri
 	public String getPatientIdentifierByPatientsId(Integer patientId, Integer identifierType) throws DAOException {
 		
 		String query = "SELECT distinct(patient_identifier.identifier) FROM patient_identifier patient_identifier "
-		        + " WHERE patient_identifier.identifier_type = :identifierType AND patient_identifier.patient_id = :patientId ";
+		        + " WHERE patient_identifier.identifier_type = :identifierType AND patient_identifier.patient_id = :patientId AND voided = 1";
 		SQLQuery sql = getSession().createSQLQuery(query);
 		sql.setInteger("identifierType", identifierType);
 		sql.setInteger("patientId", patientId);

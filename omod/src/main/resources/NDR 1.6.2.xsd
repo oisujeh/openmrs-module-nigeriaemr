@@ -567,7 +567,7 @@
 	</xs:complexType>
 	<xs:complexType name="PatientDemographicsType">
 		<xs:sequence>
-			<xs:element name="PatientIdentifier" minOccurs="1"
+			<xs:element name="PatientIdentifier" minOccurs="0"
 						maxOccurs="1">
 				<xs:simpleType>
 					<xs:annotation>

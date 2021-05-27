@@ -299,10 +299,12 @@ public class ClinicalDictionary {
         for (Date date : visitDateSet) {
             String day = Utils.getFullDay(date);
             obsPerVisitDate = groupedObsByVisitDate.get(day);
-            if (!obsPerVisitDate.isEmpty()) {
-                hivEncounterType = createHIVEncounterType(patient, date,  obsPerVisitDate);
+            if (obsPerVisitDate  != null) {
+                if(!obsPerVisitDate.isEmpty()) {
+                    hivEncounterType = createHIVEncounterType(patient, date, obsPerVisitDate);
+                }
+                hivEncounterTypeList.add(hivEncounterType);
             }
-            hivEncounterTypeList.add(hivEncounterType);
         }
         return hivEncounterTypeList;
     }

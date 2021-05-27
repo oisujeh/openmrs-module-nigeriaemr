@@ -268,7 +268,7 @@ public class PharmacyDictionary {
         regimenMap.put(1131, "HRZE");
         regimenMap.put(1674, "HRZES");
         regimenMap.put(1675,"HRZES");
-        regimenMap.put(83352,"R");
+        regimenMap.put(83352,"RF");
         regimenMap.put(165257, "CTX480");//
         regimenMap.put(76488, "FLUC");
         regimenMap.put(1679, "INHB6");
