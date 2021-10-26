@@ -258,6 +258,8 @@ public class Utils {
 	
 	/* PatientDemographics Specific Concept */
 	public final static int DATE_OF_TERMINATION_CONCEPT = 165469;
+
+	public final static int DATE_OF_DISCONTINUED_CARE = 165469;
 	
 	public final static int EDUCATIONAL_LEVEL_CONCEPT = 1712;
 	
@@ -320,6 +322,14 @@ public class Utils {
 	public final static int DATE_STOPPED_REGIMEN = 166303;
 	
 	public final static int REASON_STOPPED_REGIMEN = 1252;
+
+	public final static int DISCONTINUED_CARE = 165916;
+
+	public final static int CAUSE_OF_DEATH = 166349;
+
+	public final static int ADULT_CASES_OF_DEATH = 166348;
+
+	public final static int CHILD_CASES_OF_DEATH = 166347;
 	
 	/*
 	       HIVQuestionsType
