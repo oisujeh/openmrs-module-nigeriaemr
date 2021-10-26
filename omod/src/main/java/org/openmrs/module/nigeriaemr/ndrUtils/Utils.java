@@ -70,6 +70,8 @@ public class Utils {
 	public final static int Adult_Ped_Initial_Encounter_Type_Id = 8;
 	
 	public final static int Client_Tracking_And_Termination_Encounter_Type_Id = 15;
+
+	public static final int EAC_ENCOUNTER_TYPE = 32;
 	
 	public final static int Client_Intake_Form_Encounter_Type_Id = 20;
 	
